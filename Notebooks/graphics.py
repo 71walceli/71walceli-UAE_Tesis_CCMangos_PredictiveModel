@@ -26,3 +26,33 @@ def freq_bar_ranges(x, size, ax=plt, **plt_args):
     else:
         plt.xticks(ticks=range(1,size+1), labels=range_labels(start,end,size),rotation=60)
     return bars
+
+def sarimax_plot(train, results, test=None):
+    # TODO Plot tests. 
+    # Get forecast and confidence intervals
+    values = results["value"]
+
+    # Plot forecast with training data
+    ax = train.plot(figsize=(13,5), color="black")
+    values.plot(ax=ax, color="green")
+    if test is not None:
+        test.plot(ax=ax, color="Red")
+    ax.fill_between(results.index, 
+        results["min"], results["max"], 
+        color='green', alpha=0.5
+    )
+    plt.legend(
+        [
+            'Training', 
+            'Forecast', 
+            "Test", 
+            'Confidence'
+        ], loc='upper left'
+    )
+    plt.xlabel('Date')
+    plt.ylabel('Value')
+    plt.grid(alpha=0.5)
+    plt.autoscale()
+    plt.show()
+    return ax
+
